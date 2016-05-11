@@ -14,7 +14,7 @@ client = redis.createClient()
 client.on 'connect', () =>
   console.log 'connected to redis'
 
-  fs.readFile 'generate.lua', (err, data) =>
+  fs.readFile __dirname + '/generate.lua', (err, data) =>
     client.exists 'primes', (err, reply) =>
       if reply
         console.log 'primes list exists'
