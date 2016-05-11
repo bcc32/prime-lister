@@ -11,10 +11,10 @@ app.use morgan('combined')
 
 client = redis.createClient()
 
-client.on 'connect', () =>
+client.on 'connect', ->
   console.log 'connected to redis'
 
-  fs.readFile __dirname + '/lua/generate.lua', (err, data) =>
+  fs.readFile __dirname + '/lua/generate.lua', (err, data) ->
     client.exists 'primes', (err, reply) =>
       if reply
         console.log 'primes list exists'
@@ -28,10 +28,10 @@ client.on 'connect', () =>
           console.log 'done generating primes'
           primes_done()
 
-app.get '/primes', (req, res) =>
-  limit = req.query.limit
+app.get '/primes', (req, res) ->
+  limit = +req.query.limit
   limit = if limit? and limit > 0 and limit <= num_primes then limit else 500
-  client.lrange 'primes', 0, limit - 1, (err, obj) =>
+  client.lrange 'primes', 0, limit - 1, (err, obj) ->
     if err?
       console.err err
       res.status 500
@@ -39,10 +39,10 @@ app.get '/primes', (req, res) =>
     else
       res.send obj
 
-app.get '/primes/:index', (req, res) =>
+app.get '/primes/:index', (req, res) ->
   index = +req.params.index
   if index? and index >= 0 and index < num_primes
-    client.lindex 'primes', index, (err, obj) =>
+    client.lindex 'primes', index, (err, obj) ->
       if err?
         console.err err
         res.status 500
@@ -53,6 +53,6 @@ app.get '/primes/:index', (req, res) =>
     res.status 404
     res.end()
 
-primes_done = () =>
+primes_done = ->
   app.listen port
   console.log "listening on port #{port}"
