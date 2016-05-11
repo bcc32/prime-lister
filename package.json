@@ -1,0 +1,24 @@
+{
+  "name": "primes",
+  "version": "1.0.0",
+  "description": "Listing of prime numbers",
+  "main": "index.coffee",
+  "dependencies": {
+    "express": "^4.13.4",
+    "morgan": "^1.7.0",
+    "redis": "^2.6.0-2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "redis-server redis.conf && forever start -c coffee -o log/out.log -e log/err.log index.coffee",
+    "stop": "redis-cli shutdown; forever stop index.coffee",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "prime",
+    "number",
+    "theory"
+  ],
+  "author": "Aaron L. Zeng",
+  "license": "MIT"
+}
