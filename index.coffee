@@ -14,7 +14,7 @@ client = redis.createClient()
 client.on 'connect', () =>
   console.log 'connected to redis'
 
-  fs.readFile __dirname + '/generate.lua', (err, data) =>
+  fs.readFile __dirname + '/lua/generate.lua', (err, data) =>
     client.exists 'primes', (err, reply) =>
       if reply
         console.log 'primes list exists'
@@ -30,7 +30,7 @@ client.on 'connect', () =>
 
 app.get '/primes', (req, res) =>
   limit = req.query.limit
-  limit = if limit? and limit > 0 and limit < num_primes then limit else 500
+  limit = if limit? and limit > 0 and limit <= num_primes then limit else 500
   client.lrange 'primes', 0, limit - 1, (err, obj) =>
     if err?
       console.err err
