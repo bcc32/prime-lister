@@ -11,7 +11,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "redis-server config/redis.conf && forever start -c coffee -o log/out.log -e log/err.log index.coffee $1",
-    "stop": "redis-cli shutdown; forever stop index.coffee",
+    "stop": "forever stop index.coffee; redis-cli shutdown; true",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
