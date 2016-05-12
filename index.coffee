@@ -14,19 +14,19 @@ client = redis.createClient()
 client.on 'connect', ->
   console.log 'connected to redis'
 
-  fs.readFile __dirname + '/lua/generate.lua', (err, data) ->
-    client.exists 'primes', (err, reply) =>
-      if reply
-        console.log 'primes list exists'
+  client.exists 'primes', (err, reply) =>
+    if reply
+      console.log 'primes list exists'
+      primes_done()
+    else
+      console.log 'generating primes...'
+      lua = fs.readFileSync(__dirname + '/lua/generate.lua').toString()
+      client.eval lua, 1, 'primes', num_primes, (err, reply) =>
+        if err?
+          console.error err
+          process.exit(1)
+        console.log 'done generating primes'
         primes_done()
-      else
-        console.log 'generating primes...'
-        client.eval data.toString(), 1, 'primes', num_primes, (err, reply) =>
-          if err?
-            console.error err
-            process.exit(1)
-          console.log 'done generating primes'
-          primes_done()
 
 app.get '/primes', (req, res) ->
   limit = +req.query.limit
