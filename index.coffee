@@ -9,7 +9,7 @@ port = process.argv[2] or 3000
 app = express()
 app.use morgan('combined')
 
-client = redis.createClient()
+client = redis.createClient process.env.REDIS_URL
 
 client.on 'connect', ->
   console.log 'connected to redis'
