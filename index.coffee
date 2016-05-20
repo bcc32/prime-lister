@@ -19,8 +19,6 @@ client = redis.createClient process.env.REDIS_URL
 
 client.on 'ready', ->
   console.log 'connected to redis'
-  app.listen port
-  console.log "listening on port #{port}"
 
 client.on 'error', (err) ->
   console.error "Redis error: #{err}"
@@ -68,3 +66,6 @@ app.get '/primes/:index', (req, res) ->
   else
     res.status 404
     res.end()
+
+app.listen port
+console.log "listening on port #{port}"
