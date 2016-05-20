@@ -1,13 +1,19 @@
+coffee = require 'coffee-middleware'
+engines = require 'consolidate'
 express = require 'express'
 fs = require 'fs'
 morgan = require 'morgan'
+path = require 'path'
 redis = require 'redis'
 
 num_primes = 100000
 port = process.argv[2] or 3000
 
 app = express()
-app.use morgan('combined')
+app.use morgan 'combined'
+app.engine 'haml', engines.haml
+app.set 'view engine', 'haml'
+app.use coffee src: path.join(__dirname, 'public'), compress: true, bare: true
 
 client = redis.createClient process.env.REDIS_URL
 
@@ -28,8 +34,15 @@ client.exists 'primes', (err, reply) ->
     client.eval lua, 1, 'primes', num_primes, (err, reply) ->
       if err?
         console.error err
-        process.exit(1)
+        process.exit 1
       console.log 'done generating primes'
+
+app.use express.static 'public'
+
+app.use '/js', express.static 'bower_components'
+
+app.get '/', (req, res) ->
+  res.render 'index'
 
 app.get '/primes', (req, res) ->
   limit = +req.query.limit

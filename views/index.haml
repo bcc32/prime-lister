@@ -1,0 +1,14 @@
+%html
+  %head
+    %title Prime Lister
+    %script{src: '/js/angular/angular.min.js'}
+    %script{src: '/primes.js'}
+    %link{rel: 'stylesheet', href: '/style.css'}
+  %body{'ng-app': 'PrimesApp'}
+    %h1 Some Prime Numbers
+    %table{'ng-controller': 'PrimesController'}
+      %th
+      %th.header.entry{'ng-repeat': '(idx, row) in [].constructor(rowLength) track by $index'} {{ idx }}
+      %tr{'ng-repeat': '(idx, row) in primeTable'}
+        %td.header.entry {{ idx * 10 }}
+        %td.entry{'ng-repeat': 'prime in row'} {{ prime }}

@@ -1,0 +1,26 @@
+{
+  "name": "primes",
+  "description": "Listing of prime numbers",
+  "main": "index.coffee",
+  "authors": [
+    "Aaron L. Zeng"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "prime",
+    "number",
+    "theory"
+  ],
+  "homepage": "https://github.com/bcc32/primes",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.5"
+  }
+}
