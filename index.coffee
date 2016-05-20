@@ -11,25 +11,25 @@ app.use morgan('combined')
 
 client = redis.createClient process.env.REDIS_URL
 
-client.on 'connect', ->
+client.on 'ready', ->
   console.log 'connected to redis'
-
-  client.exists 'primes', (err, reply) ->
-    if reply
-      console.log 'primes list exists'
-      primes_done()
-    else
-      console.log 'generating primes...'
-      lua = fs.readFileSync(__dirname + '/lua/generate.lua').toString()
-      client.eval lua, 1, 'primes', num_primes, (err, reply) ->
-        if err?
-          console.error err
-          process.exit(1)
-        console.log 'done generating primes'
-        primes_done()
+  app.listen port
+  console.log "listening on port #{port}"
 
 client.on 'error', (err) ->
   console.error "Redis error: #{err}"
+
+client.exists 'primes', (err, reply) ->
+  if reply
+    console.log 'primes list exists'
+  else
+    console.log 'generating primes...'
+    lua = fs.readFileSync(__dirname + '/lua/generate.lua').toString()
+    client.eval lua, 1, 'primes', num_primes, (err, reply) ->
+      if err?
+        console.error err
+        process.exit(1)
+      console.log 'done generating primes'
 
 app.get '/primes', (req, res) ->
   limit = +req.query.limit
@@ -55,7 +55,3 @@ app.get '/primes/:index', (req, res) ->
   else
     res.status 404
     res.end()
-
-primes_done = ->
-  app.listen port
-  console.log "listening on port #{port}"
