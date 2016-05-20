@@ -4,6 +4,7 @@
   "description": "Listing of prime numbers",
   "main": "index.coffee",
   "dependencies": {
+    "bower": "^1.7.9",
     "coffee-middleware": "^0.3.0",
     "coffee-script": "^1.10.0",
     "consolidate": "^0.14.1",
@@ -14,7 +15,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "postinstall": "mkdir -p log",
+    "postinstall": "mkdir -p log && bower install",
     "start": "redis-server config/redis.conf && forever start -c coffee -o log/out.log -e log/err.log index.coffee $1",
     "stop": "forever stop index.coffee; redis-cli shutdown; true",
     "test": "echo \"Error: no test specified\" && exit 1"
