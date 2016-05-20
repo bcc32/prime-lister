@@ -14,28 +14,31 @@ client = redis.createClient process.env.REDIS_URL
 client.on 'connect', ->
   console.log 'connected to redis'
 
-  client.exists 'primes', (err, reply) =>
+  client.exists 'primes', (err, reply) ->
     if reply
       console.log 'primes list exists'
       primes_done()
     else
       console.log 'generating primes...'
       lua = fs.readFileSync(__dirname + '/lua/generate.lua').toString()
-      client.eval lua, 1, 'primes', num_primes, (err, reply) =>
+      client.eval lua, 1, 'primes', num_primes, (err, reply) ->
         if err?
           console.error err
           process.exit(1)
         console.log 'done generating primes'
         primes_done()
 
+client.on 'error', (err) ->
+  console.error "Redis error: #{err}"
+
 app.get '/primes', (req, res) ->
   limit = +req.query.limit
   limit = if limit? and limit > 0 and limit <= num_primes then limit else 500
   client.lrange 'primes', 0, limit - 1, (err, obj) ->
     if err?
-      console.err err
+      console.error err
       res.status 500
-      res.end
+      res.end()
     else
       res.send obj
 
@@ -44,7 +47,7 @@ app.get '/primes/:index', (req, res) ->
   if index? and index >= 0 and index < num_primes
     client.lindex 'primes', index, (err, obj) ->
       if err?
-        console.err err
+        console.error err
         res.status 500
         res.end()
       else
