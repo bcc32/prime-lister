@@ -1,4 +1,4 @@
-# primes
+# prime-lister
 Listing of prime numbers (playing around with Redis and NodeJS)
 
 ## Installing
