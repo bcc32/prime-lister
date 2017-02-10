@@ -1,6 +1,9 @@
 local primes = { 2, 3 }
+local key = KEYS[1]
 local limit = tonumber(ARGV[1])
 local candidate = primes[#primes] + 2
+
+redis.log(redis.LOG_DEBUG, 'computing prime list')
 
 while #primes < limit do
     local ok = true
@@ -16,7 +19,12 @@ while #primes < limit do
     candidate = candidate + 2
 end
 
+redis.log(redis.LOG_DEBUG, 'inserting primes into redis key ' .. key .. '...')
+
 for _, p in ipairs(primes) do
-    redis.call('rpush', KEYS[1], p)
+    redis.call('rpush', key, p)
 end
-return {ok=#primes}
+
+redis.log(redis.LOG_DEBUG, 'done inserting primes')
+
+return #primes
