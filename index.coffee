@@ -1,5 +1,4 @@
 coffee = require 'coffee-middleware'
-engines = require 'consolidate'
 express = require 'express'
 fs = require 'fs'
 morgan = require 'morgan'
@@ -11,8 +10,7 @@ port = process.argv[2] or 3000
 
 app = express()
 app.use morgan 'combined'
-app.engine 'haml', engines.haml
-app.set 'view engine', 'haml'
+app.set 'view engine', 'pug'
 app.use coffee src: path.join(__dirname, 'public'), compress: true, bare: true
 
 client = redis.createClient process.env.REDIS_URL
