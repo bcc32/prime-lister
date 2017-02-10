@@ -1,8 +1,20 @@
 .header {
-  color: gray;
   font-weight: bold;
 }
 
 .entry {
   text-align: right;
+}
+
+.no-borders {
+  border: 0;
+}
+
+table {
+  border-collapse: collapse;
+  font-family: monospace;
+}
+
+table td, table th {
+  border: 1px solid black;
 }

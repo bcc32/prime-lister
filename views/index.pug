@@ -7,8 +7,10 @@ html
   body(ng-app='PrimesApp')
     h1 Some Prime Numbers
     table(ng-controller='PrimesController')
-      th
-      th.header.entry(ng-repeat='(idx, row) in [].constructor(rowLength) track by $index') {{ idx }}
-      tr(ng-repeat='(idx, row) in primeTable')
-        td.header.entry {{ idx * rowLength }}
-        td.entry(ng-repeat='prime in row') {{ prime }}
+      thead: tr
+        th.no-borders
+        th.header.entry(ng-repeat='(idx, row) in [].constructor(rowLength) track by $index') {{ idx }}
+      tbody
+        tr(ng-repeat='(idx, row) in primeTable')
+          td.header.entry {{ idx * rowLength }}
+          td.entry(ng-repeat='prime in row') {{ prime }}
