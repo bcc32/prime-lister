@@ -28,12 +28,12 @@ client.exists 'primes', (err, reply) ->
     console.log 'primes list exists'
   else
     console.log 'generating primes...'
-    lua = fs.readFileSync(__dirname + '/lua/generate.lua').toString()
-    client.eval lua, 1, 'primes', num_primes, (err, reply) ->
-      if err?
-        console.error err
-        process.exit 1
-      console.log 'done generating primes'
+    fs.readFile __dirname + '/lua/generate.lua', 'utf8', (err, lua) ->
+      client.eval lua, 1, 'primes', num_primes, (err, reply) ->
+        if err?
+          console.error err
+          process.exit 1
+        console.log 'done generating primes'
 
 app.use express.static 'public'
 
