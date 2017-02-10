@@ -17,6 +17,6 @@ while #primes < limit do
 end
 
 for _, p in ipairs(primes) do
-    redis.call('rpush', 'primes', p)
+    redis.call('rpush', KEYS[1], p)
 end
 return {ok=#primes}
